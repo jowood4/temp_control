@@ -72,16 +72,18 @@ class temp_gui:
     def regulate(self):
 	read_temp = self.temp_controller.read_thermo_temp()
 	self.entry_read.delete(0, Tkinter.END)
-	self.entry_read.insert(0, self.temp_setting)
+	self.entry_read.insert(0, self.read_temp)
 	self.temp_controller.regulate_temp(self.temp_setting, read_temp)
-	self.root.after(100,self.regulate)
+	self.wait = self.root.after(100,self.regulate)
 
     def increase(self):
+	self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting + 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
 
     def decrease(self):
+	self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting - 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
