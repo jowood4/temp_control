@@ -77,14 +77,14 @@ class temp_gui:
 	self.wait = self.root.after(100,self.regulate)
 
     def increase(self):
-	self.root.after_cancel(self.wait)
+	#self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting + 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
 	#self.regulate()
 
     def decrease(self):
-	self.root.after_cancel(self.wait)
+	#self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting - 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
