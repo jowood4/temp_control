@@ -74,7 +74,7 @@ class temp_gui:
 	self.entry_read.delete(0, Tkinter.END)
 	self.entry_read.insert(0, read_temp)
 	self.temp_controller.regulate_temp(self.temp_setting, read_temp)
-	self.wait = self.root.after(100,self.regulate)
+	self.wait = self.root.after(250,self.regulate)
 
     def increase(self):
 	#self.root.after_cancel(self.wait)
@@ -91,4 +91,5 @@ class temp_gui:
 	#self.regulate()
 
 top = temp_gui()
+top.wait = top.root.after(250,regulate)
 top.root.mainloop()
