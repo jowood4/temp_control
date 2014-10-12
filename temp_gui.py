@@ -49,10 +49,15 @@ class temp_gui:
         self.down_button.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
         self.down_button.place(width = 100, height = 50, relx = 0.6, rely = 0.6)
 
-	self.entry = Tkinter.Entry(self.frame['main_screen'],cursor="none")
-        self.entry.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
-        self.entry.place(width = 100, height = 50, relx = 0.1, rely = 0.4)
-	self.entry.insert(0, self.temp_setting)
+	self.entry_read = Tkinter.Entry(self.frame['main_screen'],cursor="none")
+        self.entry_read.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
+        self.entry_read.place(width = 100, height = 50, relx = 0.1, rely = 0.3)
+	self.entry_read.insert(0, self.temp_setting)
+
+	self.entry_set = Tkinter.Entry(self.frame['main_screen'],cursor="none")
+        self.entry_set.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
+        self.entry_set.place(width = 100, height = 50, relx = 0.1, rely = 0.6)
+	self.entry_set.insert(0, self.temp_setting)
 
     def show_splash_screen(self):
         #self.frame['splash_screen'].lift()
@@ -66,18 +71,20 @@ class temp_gui:
 
     def regulate(self):
 	read_temp = self.temp_controller.read_thermo_temp()
+	self.entry_read.delete(0, Tkinter.END)
+	self.entry_read.insert(0, self.temp_setting)
 	self.temp_controller.regulate_temp(self.temp_setting, read_temp)
 	self.root.after(100,self.regulate)
 
     def increase(self):
 	self.temp_setting = self.temp_setting + 1
-	self.entry.delete(0, Tkinter.END)
-	self.entry.insert(0, self.temp_setting)
+	self.entry_set.delete(0, Tkinter.END)
+	self.entry_set.insert(0, self.temp_setting)
 
     def decrease(self):
 	self.temp_setting = self.temp_setting - 1
-	self.entry.delete(0, Tkinter.END)
-	self.entry.insert(0, self.temp_setting)
+	self.entry_set.delete(0, Tkinter.END)
+	self.entry_set.insert(0, self.temp_setting)
 
 top = temp_gui()
 top.root.mainloop()
