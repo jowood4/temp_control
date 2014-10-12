@@ -13,6 +13,7 @@ class temp_gui:
         #self.root.overrideredirect(1)  #take off title bar
 	self.splash_wait = 3
 	self.temp_setting = 25
+	self.read_temp = 25
 	self.temp_controller = temp_control.temp_control()
 
 	self.thread1 = threading.Thread(target=self.regulate)
@@ -53,12 +54,12 @@ class temp_gui:
         self.down_button.place(width = 100, height = 50, relx = 0.6, rely = 0.6)
 
 	self.entry_read = Tkinter.Entry(self.frame['main_screen'],cursor="none")
-        self.entry_read.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
+        self.entry_read.config(cursor="none",font=("Century Schoolbook L",20))
         self.entry_read.place(width = 100, height = 50, relx = 0.1, rely = 0.3)
 	self.entry_read.insert(0, self.temp_setting)
 
 	self.entry_set = Tkinter.Entry(self.frame['main_screen'],cursor="none")
-        self.entry_set.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
+        self.entry_set.config(cursor="none", font=("Century Schoolbook L",20))
         self.entry_set.place(width = 100, height = 50, relx = 0.1, rely = 0.6)
 	self.entry_set.insert(0, self.temp_setting)
 
@@ -73,8 +74,10 @@ class temp_gui:
 	self.update_read_temp()
 
     def regulate(self):
-	self.read_temp = self.temp_controller.read_thermo_temp()
-	self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
+	#print self.read_temp
+	while True:
+		self.read_temp = self.temp_controller.read_thermo_temp()
+		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
 
     def increase(self):
 	self.temp_setting = self.temp_setting + 1
