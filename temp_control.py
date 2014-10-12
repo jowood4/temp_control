@@ -29,26 +29,19 @@ class temp_control:
                 self.thermocouple.read_temp()
                 return self.thermocouple.thermocouple_temp * 0.25
 
-        def regulate_temp(self, set_temp):
+	def heat(self):
+                self.relay_on()
+                wiringpi2.delay(100)
+                self.relay_off()
+                wiringpi2.delay(2000)
+
+        def regulate_temp(self, set_temp, read_temp):
                 delta = 1
-                timeout = 20
 
-                for i in range(timeout):
-                        read_temp = self.read_thermo_temp()
-                        print read_temp
-                        self.relay_off()
+                self.relay_off()
 
-                        if(read_temp <= set_temp - delta):
-                                self.relay_on()
-                                print('Relay ON')
-                                wiringpi2.delay(100)
-                                self.relay_off()
-                                wiringpi2.delay(2000)
-                        elif(read_temp >= set_temp - delta):
-                                self.relay_off()
-                                print('Relay Off')
-
-                        wiringpi2.delay(100)
+                if(read_temp <= set_temp - delta):
+			self.heat()
 
                 self.relay_off()
                 
