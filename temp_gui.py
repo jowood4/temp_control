@@ -70,7 +70,7 @@ class temp_gui:
 
     def show_main_screen(self):
         self.frame['main_screen'].lift()
-	self.root.after(1000,regulate)
+	self.update_read_temp()
 
     def regulate(self):
 	self.read_temp = self.temp_controller.read_thermo_temp()
