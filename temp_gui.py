@@ -16,9 +16,6 @@ class temp_gui:
 	self.read_temp = 25
 	self.temp_controller = temp_control.temp_control()
 
-	self.thread1 = threading.Thread(target=self.regulate)
-	self.thread1.start()
-
         self.frame = {}
         self.frame['splash_screen'] = Tkinter.Frame(self.root,cursor="none")
         self.frame['main_screen'] = Tkinter.Frame(self.root,cursor="none")
@@ -71,6 +68,8 @@ class temp_gui:
 
     def show_main_screen(self):
         self.frame['main_screen'].lift()
+	self.thread1 = threading.Thread(target=self.regulate)
+	self.thread1.start()
 	self.update_read_temp()
 
     def regulate(self):
@@ -78,6 +77,7 @@ class temp_gui:
 	while True:
 		self.read_temp = self.temp_controller.read_thermo_temp()
 		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
+		time.sleep(0.1)
 
     def increase(self):
 	self.temp_setting = self.temp_setting + 1
