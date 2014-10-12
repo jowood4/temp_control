@@ -1,8 +1,8 @@
 #! /usr/bin/python
 
 import Image, ImageDraw, ImageTk
-import Tkinter, subprocess, time, threading, Queue
-import temp_control
+import Tkinter, subprocess, threading, Queue
+import temp_control, wiringpi2
 
 class temp_gui:
     def __init__(self):
@@ -11,9 +11,11 @@ class temp_gui:
         self.height = 240
         self.root.geometry('%dx%d+%d+%d' % (self.width, self.height, 0,0))
         #self.root.overrideredirect(1)  #take off title bar
-	self.splash_wait = 3
+	self.splash_wait = 3000
 	self.temp_setting = 25
 	self.read_temp = 25
+	self.run_temp_control = 0
+	self.thread1 = threading.Thread(target=self.regulate)
 	self.temp_controller = temp_control.temp_control()
 
         self.frame = {}
@@ -43,12 +45,17 @@ class temp_gui:
         self.up_button = Tkinter.Button(self.frame['main_screen'],cursor="none")
         self.up_button.config(command = self.increase)
 	self.up_button.config(cursor="none",text="Up", font=("Century Schoolbook L",20))
-        self.up_button.place(width = 100, height = 50, relx = 0.6, rely = 0.3)
+        self.up_button.place(width = 100, height = 50, relx = 0.6, rely = 0.1)
         
         self.down_button = Tkinter.Button(self.frame['main_screen'])
         self.down_button.config(command = self.decrease)
         self.down_button.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
-        self.down_button.place(width = 100, height = 50, relx = 0.6, rely = 0.6)
+        self.down_button.place(width = 100, height = 50, relx = 0.6, rely = 0.4)
+        
+        self.quit_button = Tkinter.Button(self.frame['main_screen'])
+        self.quit_button.config(command = self.quit)
+        self.quit_button.config(cursor="none",text="Quit", font=("Century Schoolbook L",20))
+        self.quit_button.place(width = 100, height = 50, relx = 0.6, rely = 0.7)
 
 	self.entry_read = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         self.entry_read.config(cursor="none",font=("Century Schoolbook L",20))
@@ -63,21 +70,21 @@ class temp_gui:
     def show_splash_screen(self):
         #self.frame['splash_screen'].lift()
 	#self.root.update()
-	#time.sleep(self.splash_wait)
+	#wiringpi2.delay(self.splash_wait)
 	self.show_main_screen()
 
     def show_main_screen(self):
         self.frame['main_screen'].lift()
-	self.thread1 = threading.Thread(target=self.regulate)
+	self.run_temp_control = 1
 	self.thread1.start()
 	self.update_read_temp()
 
     def regulate(self):
 	#print self.read_temp
-	while True:
+	while self.run_temp_control:
 		self.read_temp = self.temp_controller.read_thermo_temp()
 		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
-		time.sleep(0.1)
+		wiringpi2.delay(100)
 
     def increase(self):
 	self.temp_setting = self.temp_setting + 1
@@ -92,7 +99,11 @@ class temp_gui:
     def update_read_temp(self):
 	self.entry_read.delete(0, Tkinter.END)
 	self.entry_read.insert(0, self.read_temp)
-	self.root.after(1000, self.update_read_temp)
+	self.root.after(1500, self.update_read_temp)
+
+    def quit(self):
+	self.run_temp_control = 0
+	self.root.destroy()
 
 top = temp_gui()
 top.root.mainloop()
