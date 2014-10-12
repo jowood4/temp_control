@@ -2,6 +2,7 @@
 
 import Image, ImageDraw, ImageTk
 import Tkinter, subprocess, time
+import temp_control
 
 class temp_gui:
     def __init__(self):
@@ -12,6 +13,7 @@ class temp_gui:
         #self.root.overrideredirect(1)  #take off title bar
 	self.splash_wait = 3
 	self.temp_setting = 25
+	self.temp_controller = temp_control.temp_control()
 
         self.frame = {}
         self.frame['splash_screen'] = Tkinter.Frame(self.root,cursor="none")
@@ -60,6 +62,12 @@ class temp_gui:
 
     def show_main_screen(self):
         self.frame['main_screen'].lift()
+	self.regulate()
+
+    def regulate(self):
+	read_temp = self.temp_controller.read_thermo_temp()
+	self.temp_controller.regulate_temp(self.temp_setting, read_temp)
+	self.root.after(100,self.regulate)
 
     def increase(self):
 	self.temp_setting = self.temp_setting + 1
