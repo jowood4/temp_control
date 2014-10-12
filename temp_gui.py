@@ -81,14 +81,14 @@ class temp_gui:
 	self.temp_setting = self.temp_setting + 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
-	self.regulate()
+	#self.regulate()
 
     def decrease(self):
 	self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting - 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
-	self.regulate()
+	#self.regulate()
 
 top = temp_gui()
 top.root.mainloop()
