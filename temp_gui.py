@@ -72,7 +72,7 @@ class temp_gui:
     def regulate(self):
 	read_temp = self.temp_controller.read_thermo_temp()
 	self.entry_read.delete(0, Tkinter.END)
-	self.entry_read.insert(0, self.read_temp)
+	self.entry_read.insert(0, read_temp)
 	self.temp_controller.regulate_temp(self.temp_setting, read_temp)
 	self.wait = self.root.after(100,self.regulate)
 
