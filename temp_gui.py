@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 import Image, ImageDraw, ImageTk
-import Tkinter, subprocess, time
+import Tkinter, subprocess, time, threading, Queue
 import temp_control
 
 class temp_gui:
@@ -14,6 +14,9 @@ class temp_gui:
 	self.splash_wait = 3
 	self.temp_setting = 25
 	self.temp_controller = temp_control.temp_control()
+
+	self.thread1 = threading.Thread(target=self.regulate)
+	self.thread1.start()
 
         self.frame = {}
         self.frame['splash_screen'] = Tkinter.Frame(self.root,cursor="none")
@@ -67,29 +70,26 @@ class temp_gui:
 
     def show_main_screen(self):
         self.frame['main_screen'].lift()
-	self.regulate()
+	self.root.after(1000,regulate)
 
     def regulate(self):
-	read_temp = self.temp_controller.read_thermo_temp()
-	self.entry_read.delete(0, Tkinter.END)
-	self.entry_read.insert(0, read_temp)
-	self.temp_controller.regulate_temp(self.temp_setting, read_temp)
-	self.wait = self.root.after(250,self.regulate)
+	self.read_temp = self.temp_controller.read_thermo_temp()
+	self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
 
     def increase(self):
-	#self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting + 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
-	#self.regulate()
 
     def decrease(self):
-	#self.root.after_cancel(self.wait)
 	self.temp_setting = self.temp_setting - 1
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.temp_setting)
-	#self.regulate()
+
+    def update_read_temp(self):
+	self.entry_read.delete(0, Tkinter.END)
+	self.entry_read.insert(0, self.read_temp)
+	self.root.after(1000, self.update_read_temp)
 
 top = temp_gui()
-top.wait = top.root.after(250,regulate)
 top.root.mainloop()
