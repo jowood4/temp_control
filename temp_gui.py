@@ -105,7 +105,7 @@ class temp_gui:
 
     def show_main_screen(self):
         self.frame['main_screen'].lift()
-	self.thread.run_temp_control = 1
+	self.start_temp()
 	self.thread.start()
 
     def increase(self):
@@ -127,6 +127,7 @@ class temp_gui:
 	self.wait = self.root.after(2000, self.start_temp)
 
     def start_temp(self):
+	self.thread.run_temp_control = 1
 	self.wait = 0
 	self.queue.put(self.thread.temp_setting)
 
