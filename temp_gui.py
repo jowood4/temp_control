@@ -2,13 +2,13 @@
 
 import Image, ImageDraw, ImageTk
 import Tkinter, subprocess, threading, Queue
-import temp_control, wiringpi2
+#import temp_control, wiringpi2
 
 class temp_loop(threading.Thread):
     def __init__(self, queue):
 	threading.Thread.__init__(self)
 	self.queue = queue
-	self.temp_controller = temp_control.temp_control()
+#	self.temp_controller = temp_control.temp_control()
 	self.temp_setting = 25
 	self.read_temp = 25
 	self.run_temp_control = 1
@@ -32,10 +32,10 @@ class temp_loop(threading.Thread):
 			else:
 				self.temp_setting = temp 
 
-		self.read_temp = self.temp_controller.read_thermo_temp()
-		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
+#		self.read_temp = self.temp_controller.read_thermo_temp()
+#		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
 		self.update_read_temp()		
-		wiringpi2.delay(100)
+#		wiringpi2.delay(100)
 
 class temp_gui:
     def __init__(self):
@@ -72,29 +72,32 @@ class temp_gui:
     def configure_main(self):
         self.configure_panel('main_screen')
 
-        self.up_button = Tkinter.Button(self.frame['main_screen'],cursor="none")
-        self.up_button.config(command = self.increase)
-	self.up_button.config(cursor="none",text="Up", font=("Century Schoolbook L",20))
-        self.up_button.place(width = 100, height = 50, relx = 0.6, rely = 0.1)
+        #self.up_button = Tkinter.Button(self.frame['main_screen'],cursor="none")
+        #self.up_button.config(command = self.increase)
+	#self.up_button.config(cursor="none",text="Up", font=("Century Schoolbook L",20))
+        #self.up_button.place(width = 100, height = 50, relx = 0.6, rely = 0.1)
         
-        self.down_button = Tkinter.Button(self.frame['main_screen'])
-        self.down_button.config(command = self.decrease)
-        self.down_button.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
-        self.down_button.place(width = 100, height = 50, relx = 0.6, rely = 0.4)
-        
+        #self.down_button = Tkinter.Button(self.frame['main_screen'])
+        #self.down_button.config(command = self.decrease)
+        #self.down_button.config(cursor="none",text="Down", font=("Century Schoolbook L",20))
+        #self.down_button.place(width = 100, height = 50, relx = 0.6, rely = 0.4)
+	self.scale = Tkinter.Scale(self.frame['main_screen'],cursor="none", from_ = 25, to = 150)
+	self.scale.config(command=self.set_set_temp, orient="horizontal")
+	self.scale.place(width = 200, height = 50, relx = 0.15, rely = 0.7)        
+
         self.quit_button = Tkinter.Button(self.frame['main_screen'])
         self.quit_button.config(command = self.quit)
         self.quit_button.config(cursor="none",text="Quit", font=("Century Schoolbook L",20))
-        self.quit_button.place(width = 100, height = 50, relx = 0.6, rely = 0.7)
+        self.quit_button.place(width = 100, height = 50, relx = 0.6, rely = 0.4)
 
 	entry_read = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         entry_read.config(cursor="none",font=("Century Schoolbook L",20))
-        entry_read.place(width = 100, height = 50, relx = 0.1, rely = 0.3)
+        entry_read.place(width = 100, height = 50, relx = 0.1, rely = 0.1)
 	self.thread.set_entry(entry_read)	
 
 	self.entry_set = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         self.entry_set.config(cursor="none", font=("Century Schoolbook L",20))
-        self.entry_set.place(width = 100, height = 50, relx = 0.1, rely = 0.6)
+        self.entry_set.place(width = 100, height = 50, relx = 0.1, rely = 0.4)
 	self.entry_set.insert(0, self.thread.temp_setting)
 
     def show_splash_screen(self):
@@ -106,22 +109,31 @@ class temp_gui:
     def show_main_screen(self):
         self.frame['main_screen'].lift()
 	self.start_temp()
-	self.thread.start()
+	#self.thread.start()
 
-    def increase(self):
+#    def increase(self):
+#	if self.wait != 0:
+#		self.root.after_cancel(self.wait)
+#	self.queue.put(-100)
+#	self.thread.temp_setting = self.thread.temp_setting + 1
+#	self.entry_set.delete(0, Tkinter.END)
+#	self.entry_set.insert(0, self.thread.temp_setting)
+#	self.wait = self.root.after(2000, self.start_temp)
+
+#    def decrease(self):
+#	if self.wait != 0:
+#		self.root.after_cancel(self.wait)
+#	self.queue.put(-100)
+#	self.thread.temp_setting = self.thread.temp_setting - 1
+#	self.entry_set.delete(0, Tkinter.END)
+#	self.entry_set.insert(0, self.thread.temp_setting)
+#	self.wait = self.root.after(2000, self.start_temp)
+
+    def set_set_temp(self, value):
 	if self.wait != 0:
 		self.root.after_cancel(self.wait)
 	self.queue.put(-100)
-	self.thread.temp_setting = self.thread.temp_setting + 1
-	self.entry_set.delete(0, Tkinter.END)
-	self.entry_set.insert(0, self.thread.temp_setting)
-	self.wait = self.root.after(2000, self.start_temp)
-
-    def decrease(self):
-	if self.wait != 0:
-		self.root.after_cancel(self.wait)
-	self.queue.put(-100)
-	self.thread.temp_setting = self.thread.temp_setting - 1
+	self.thread.temp_setting = value #self.scale.get()
 	self.entry_set.delete(0, Tkinter.END)
 	self.entry_set.insert(0, self.thread.temp_setting)
 	self.wait = self.root.after(2000, self.start_temp)
@@ -130,6 +142,7 @@ class temp_gui:
 	self.thread.run_temp_control = 1
 	self.wait = 0
 	self.queue.put(self.thread.temp_setting)
+	self.thread.start()
 
     def quit(self):
 	self.queue.put(-100)
