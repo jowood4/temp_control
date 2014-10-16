@@ -8,7 +8,7 @@ class temp_loop(threading.Thread):
     def __init__(self, queue):
 	threading.Thread.__init__(self)
 	self.queue = queue
-#	self.temp_controller = temp_control.temp_control()
+	self.temp_controller = temp_control.temp_control()
 	self.temp_setting = 25
 	self.read_temp = 25
 	self.run_temp_control = 1
