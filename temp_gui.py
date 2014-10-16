@@ -54,8 +54,8 @@ class temp_gui:
         self.button = {}
         self.panel = {}
         self.tk_backgnd_pic = {}
-	#self.backgnd_pic = {}
-	#self.backgnd_pic['splash_screen'] = "/home/pi/photo_booth/start_screen.png"
+	self.backgnd_pic = {}
+	self.backgnd_pic['splash_screen'] = "/home/pi/temp_contorl/bird.png"
 	#self.backgnd_pic['main_screen'] = "/home/pi/photo_booth/preview.png"
 	self.configure_panel('splash_screen')
 	self.configure_main()
