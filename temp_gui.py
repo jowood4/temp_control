@@ -2,7 +2,7 @@
 
 import Image, ImageDraw, ImageTk
 import Tkinter, subprocess, threading, Queue
-#import temp_control, wiringpi2
+import temp_control, wiringpi2
 
 class temp_loop(threading.Thread):
     def __init__(self, queue):
@@ -12,6 +12,7 @@ class temp_loop(threading.Thread):
 	self.temp_setting = 25
 	self.read_temp = 25
 	self.run_temp_control = 1
+	self.count = 1
 
     def set_entry(self, entry):
 	self.entry_read = entry
@@ -26,16 +27,20 @@ class temp_loop(threading.Thread):
 	while self.run_temp_control:
 		if self.queue.empty() != True:
 			temp = self.queue.get(0)
-			print temp
+			#print temp
 			if temp == -100:
 				self.run_temp_control = 0
 			else:
 				self.temp_setting = temp 
 
-#		self.read_temp = self.temp_controller.read_thermo_temp()
-#		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)
-		self.update_read_temp()		
-#		wiringpi2.delay(100)
+		self.read_temp = self.temp_controller.read_thermo_temp()
+		self.temp_controller.regulate_temp(self.temp_setting, self.read_temp)		
+		wiringpi2.delay(100)
+		if self.count == 100:
+			self.update_read_temp()
+			self.count = 0
+		else:
+			self.count = self.count + 1
 
 class temp_gui:
     def __init__(self):
