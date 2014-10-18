@@ -76,23 +76,34 @@ class temp_gui:
         self.configure_panel('main_screen')
 
 	self.scale = Tkinter.Scale(self.frame['main_screen'], from_ = 25, to = 150)
-	self.scale.config(command=self.set_set_temp, orient="horizontal")
-	self.scale.place(width = 250, height = 100, relx = 0.15, rely = 0.6)        
+	self.scale.config(command=self.set_set_temp, tickinterval = 25, orient="horizontal", sliderlength=50)
+	self.scale.config(fg = "white", bg = "black", bd = 0)
+	self.scale.place(width = 320, relx = 0.0, rely = 0.6)        
 
         self.quit_button = Tkinter.Button(self.frame['main_screen'])
         self.quit_button.config(command = self.quit)
-        self.quit_button.config(cursor="none",text="Quit", font=("Century Schoolbook L",20))
-        self.quit_button.place(width = 100, height = 50, relx = 0.7, rely = 0.1)
+        self.quit_button.config(cursor="none",text="Quit", font=("Century Schoolbook L",16))
+        self.quit_button.place(width = 80, height = 50, relx = 0.7, rely = 0.2)
 
 	self.entry_read = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         self.entry_read.config(cursor="none",font=("Century Schoolbook L",20))
-        self.entry_read.place(width = 100, height = 50, relx = 0.05, rely = 0.1)
+        self.entry_read.place(width = 80, height = 50, relx = 0.05, rely = 0.2)
 	self.entry_read.insert(0, self.read_temp)
 
 	self.entry_set = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         self.entry_set.config(cursor="none", font=("Century Schoolbook L",20))
-        self.entry_set.place(width = 100, height = 50, relx = 0.35, rely = 0.1)
+        self.entry_set.place(width = 80, height = 50, relx = 0.35, rely = 0.2)
 	self.entry_set.insert(0, self.temp_setting)
+
+	self.temp_set_label = Tkinter.Label(self.frame['main_screen'])
+	self.temp_set_label.config(text = "Set Temp", font=("Century Schoolbook L",12))
+	self.temp_set_label.config(fg = "white", bg = "black")
+	self.temp_set_label.place(width = 80, height = 35, relx = 0.05, rely = 0.05)
+
+	self.temp_read_label = Tkinter.Label(self.frame['main_screen'])
+	self.temp_read_label.config(text = "Read Temp", font=("Century Schoolbook L",12))
+	self.temp_read_label.config(fg = "white", bg = "black")
+	self.temp_read_label.place(width = 85, height = 35, relx = 0.35, rely = 0.05)
 
     def show_splash_screen(self):
         self.frame['splash_screen'].lift()
