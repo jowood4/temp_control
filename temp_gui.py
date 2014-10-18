@@ -77,21 +77,21 @@ class temp_gui:
 
 	self.scale = Tkinter.Scale(self.frame['main_screen'],cursor="none", from_ = 25, to = 150)
 	self.scale.config(command=self.set_set_temp, orient="horizontal")
-	self.scale.place(width = 200, height = 50, relx = 0.15, rely = 0.7)        
+	self.scale.place(width = 250, height = 100, relx = 0.15, rely = 0.6)        
 
         self.quit_button = Tkinter.Button(self.frame['main_screen'])
         self.quit_button.config(command = self.quit)
         self.quit_button.config(cursor="none",text="Quit", font=("Century Schoolbook L",20))
-        self.quit_button.place(width = 100, height = 50, relx = 0.6, rely = 0.4)
+        self.quit_button.place(width = 100, height = 50, relx = 0.7, rely = 0.1)
 
 	self.entry_read = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         self.entry_read.config(cursor="none",font=("Century Schoolbook L",20))
-        self.entry_read.place(width = 100, height = 50, relx = 0.1, rely = 0.1)
+        self.entry_read.place(width = 100, height = 50, relx = 0.05, rely = 0.1)
 	self.entry_read.insert(0, self.read_temp)
 
 	self.entry_set = Tkinter.Entry(self.frame['main_screen'],cursor="none")
         self.entry_set.config(cursor="none", font=("Century Schoolbook L",20))
-        self.entry_set.place(width = 100, height = 50, relx = 0.1, rely = 0.4)
+        self.entry_set.place(width = 100, height = 50, relx = 0.35, rely = 0.1)
 	self.entry_set.insert(0, self.temp_setting)
 
     def show_splash_screen(self):
@@ -104,7 +104,7 @@ class temp_gui:
     def show_main_screen(self):
         self.frame['main_screen'].lift()
 	self.start_temp()
-	self.root.after(1000, self.update_read_temp)
+	self.root.after(2000, self.update_read_temp)
 
     def update_read_temp(self):
 	while self.queue_read.empty() != True:
@@ -112,7 +112,7 @@ class temp_gui:
 	self.read_temp = temp
 	self.entry_read.delete(0, Tkinter.END)
 	self.entry_read.insert(0, self.read_temp)
-	self.root.after(1000, self.update_read_temp)
+	self.root.after(2000, self.update_read_temp)
 
     def set_set_temp(self, value):
 	self.queue_set.put(value)
