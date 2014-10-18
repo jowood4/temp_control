@@ -18,7 +18,7 @@ class temp_loop(threading.Thread):
 
     def run(self):
 	while self.run_temp_control:
-		time.sleep(0.001)
+		#time.sleep(0.001)
 		wiringpi2.delay(100)
 		if self.queue_set.empty() != True:
 			temp = self.queue_set.get(0)
