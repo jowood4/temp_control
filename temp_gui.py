@@ -75,7 +75,7 @@ class temp_gui:
     def configure_main(self):
         self.configure_panel('main_screen')
 
-	self.scale = Tkinter.Scale(self.frame['main_screen'],cursor="none", from_ = 25, to = 150)
+	self.scale = Tkinter.Scale(self.frame['main_screen'], from_ = 25, to = 150)
 	self.scale.config(command=self.set_set_temp, orient="horizontal")
 	self.scale.place(width = 250, height = 100, relx = 0.15, rely = 0.6)        
 
