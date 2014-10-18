@@ -108,8 +108,7 @@ class temp_gui:
 
     def update_read_temp(self):
 	while self.queue_read.empty() != True:
-		temp = self.queue_read.get(0)
-	self.read_temp = temp
+		self.read_temp = self.queue_read.get(0)
 	self.entry_read.delete(0, Tkinter.END)
 	self.entry_read.insert(0, self.read_temp)
 	self.root.after(2000, self.update_read_temp)
